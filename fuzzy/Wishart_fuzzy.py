@@ -8,12 +8,13 @@ from fuzzifier import Fuzzifier, fuzzy_distance
 import time
 
 class Wishart_fuzzy:
-    def __init__(self, wishart_neighbors, significance_level, l, r, dc):
+    def __init__(self, wishart_neighbors, significance_level, l, r, dc, dim):
         self.wishart_neighbors = wishart_neighbors  # Number of neighbors
         self.significance_level = significance_level  # Significance level
         self.l = l    # length of left slope
         self.r = r    # length of right slope
         self.dc = dc    # length of mu == 1
+        self.dim = dim    # vector space dim
         
     def fit(self, X, mus, precomputed=False, verbose=True):
         """
@@ -43,7 +44,7 @@ class Wishart_fuzzy:
         distances = distances[:, -1]
         indexes = np.argsort(distances)
         
-        size, dim = X.shape
+        size, dim = X.shape[0], self.dim
 
         self.object_labels = np.zeros(size, dtype = int) - 1
 
