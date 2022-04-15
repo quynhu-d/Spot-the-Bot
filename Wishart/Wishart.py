@@ -200,7 +200,8 @@ class PreTrainWishart:
 
                             self._add_elem_to_exist_cluster(index, distances[index], min_cluster)
 
-        return self.clean_data()
+        self.clean_data()
+        return self
 
     def clean_data(self):
         unique = np.unique(self.object_labels)
@@ -208,10 +209,18 @@ class PreTrainWishart:
         if unique[0] != 0:
             index += 1
         true_cluster = {unq :  index for unq, index in zip(unique, index)}
-        result = np.zeros(len(self.object_labels), dtype = int)
+        label_result = np.zeros(len(self.object_labels), dtype = int)
+        c2o_result = defaultdict()
         for index, unq in enumerate(self.object_labels):
-            result[index] = true_cluster[unq]
-        return result
+            label_result[index] = true_cluster[unq]
+        clusters_result = []
+        for i, (unq, idx) in enumerate(true_cluster.items()):
+            c2o_result[idx] = self.clusters_to_objects[unq]
+            clusters_result.append(self.clusters[i])
+        self.clusters_to_objects = c2o_result
+        self.object_labels = label_result
+        self.clusters = clusters_result
+        return self
 
     def _add_elem_to_noise(self, index):
         self.object_labels[index] = 0
