@@ -172,5 +172,6 @@ class ClusterData():
         for metricname in names:
             if metricname == 'silhouette_score':
                 self.scores['silhouette_score'] = silhouette_score(self.data, self.labels)
+                continue
             self.scores[metricname] = self._metrics_functions[metricname](**self.__dict__)
         return self
