@@ -170,8 +170,8 @@ class ClusterData():
         within_cluster_dist_sum_store.clear()
 
         for metricname in names:
-            if metricname == 'silhouette_score':
-                self.scores['silhouette_score'] = silhouette_score(self.data, self.labels)
-                continue
-            self.scores[metricname] = self._metrics_functions[metricname](**self.__dict__)
+            if metricname in ['silhouette_score', 'SD', 'S_Dbw', 'CH', 'DB']:
+                self.scores[metricname] = self._metrics_functions[metricname](self.data, self.labels)
+            else:
+                self.scores[metricname] = self._metrics_functions[metricname](**self.__dict__)
         return self
